@@ -5,13 +5,13 @@ import axiosInstance from "../utils/axiosInstance";
 import { API_PATHS } from "../utils/apiPaths";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setAllPosts] = useState([]);
 
   // ✅ Fetch published posts (public)
   const getPosts = async () => {
     try {
-      const res = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_POSTS);
-      setPosts(res.data?.posts || []);
+      const response = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_PUBLIC);
+  setAllPosts(response.data.posts);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }

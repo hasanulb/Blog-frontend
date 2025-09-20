@@ -11,8 +11,8 @@ const AdminPosts = () => {
 
   const getAllPosts = async () => {
     try {
-      const response = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_POSTS);
-      setAllPosts(response.data?.posts || []);
+      const response = await axiosInstance.get(API_PATHS.POSTS.GET_ADMIN_POSTS);
+  setAllPosts(response.data.posts);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }

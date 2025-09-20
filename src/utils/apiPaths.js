@@ -20,7 +20,9 @@ export const API_PATHS = {
   },
 
   POSTS: {
-    GET_ALL_POSTS: "/api/posts",
+    GET_ADMIN_POSTS: "/api/posts/admin",
+    GET_MEMBER_POSTS: "/api/posts/member",
+    GET_ALL_PUBLIC: "/api/posts/public",
     GET_POST_BY_ID: (postId) => `/api/posts/${postId}`, // ✅ correct
     CREATE_POST: "/api/posts",
     UPDATE_POST: (postId) => `/api/posts/${postId}`, // ✅ correct

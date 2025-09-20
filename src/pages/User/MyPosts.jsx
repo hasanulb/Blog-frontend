@@ -4,21 +4,15 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import PostCard from "../../components/Cards/PostCard";
-import toast from "react-hot-toast";
+
 
 const MyPosts = () => {
   const [userPosts, setUserPosts] = useState([]);
   const navigate = useNavigate();
 
   const getUserPosts = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_POSTS);
-      const userPosts = response.data?.posts || [];
-      setUserPosts(userPosts);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-      toast.error("Failed to load your posts");
-    }
+    const response = await axiosInstance.get(API_PATHS.POSTS.GET_MEMBER_POSTS);
+    setUserPosts(response.data.posts);
   };
 
   const handleClick = (postId) => {

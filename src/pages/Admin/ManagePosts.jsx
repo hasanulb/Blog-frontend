@@ -2,53 +2,52 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
 import PostCard from "../../components/Cards/PostCard";
-import toast from "react-hot-toast";
 
 const AdminPosts = () => {
-  const [posts, setPosts] = useState([]);
+  const [allPosts, setAllPosts] = useState([]);
   const navigate = useNavigate();
 
-  const fetchPosts = async () => {
+  const getAllPosts = async () => {
     try {
-      const response = await axiosInstance.get("/api/posts"); // backend filters by role
-      setPosts(response.data.posts || []);
+      const response = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_POSTS);
+      setAllPosts(response.data?.posts || []);
     } catch (error) {
       console.error("Error fetching posts:", error);
-      toast.error("Failed to load posts");
     }
   };
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const handleClick = (postId) => {
-    navigate(`/admin/post/${postId}`);
+  const handleClick = (postData) => {
+    navigate(`/admin/post/${postData._id}`);
   };
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return (
     <DashboardLayout activeMenu="Manage Posts">
       <div className="my-5">
         <h2 className="text-xl font-medium mb-4">All Posts</h2>
 
-        {posts.length === 0 ? (
-          <p className="text-gray-500">No posts found.</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {posts.map((post) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {allPosts.length > 0 ? (
+            allPosts.map((item) => (
               <PostCard
-                key={post._id}
-                title={post.title}
-                description={post.description}
-                postImageUrl={post.postImageUrl}
-                createdBy={post.createdBy?.name}
-                createdAt={post.createdAt}
-                onClick={() => handleClick(post._id)}
+                key={item._id}
+                title={item.title}
+                description={item.description}
+                postImageUrl={item.postImageUrl}
+                createdBy={item.createdBy?.name}
+                createdAt={item.createdAt}
+                onClick={() => handleClick(item)}
               />
-            ))}
-          </div>
-        )}
+            ))
+          ) : (
+            <p>No posts found.</p>
+          )}
+        </div>
       </div>
     </DashboardLayout>
   );

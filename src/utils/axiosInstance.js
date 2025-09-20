@@ -1,10 +1,11 @@
 import axios from "axios";
 import { BASE_URL } from "./apiPaths";
+const token = localStorage.getItem("token");
 
 const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "https://blog-backend-j2ex.onrender.com",
   headers: {
-    "Content-Type": "application/json",
+    Authorization: token ? `Bearer ${token}` : "",
   },
 });
 

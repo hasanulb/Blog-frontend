@@ -1,7 +1,7 @@
 //  utils/apiPaths.js
 
 // eslint-disable-next-line no-undef
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const API_PATHS = {
   AUTH: {

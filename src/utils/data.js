@@ -9,30 +9,24 @@ import {
 export const SIDE_MENU_DATA = [
   {
     id: "01",
-    label: "Dashboard",
-    icon: LuLayoutDashboard,
-    path: "/admin/dashboard",
-  },
-  {
-    id: "02",
     label: "Manage Posts",
     icon: LuClipboardCheck,
     path: "/admin/posts",
   },
   {
-    id: "03",
+    id: "01",
     label: "Create Post",
     icon: LuSquarePlus,
     path: "/admin/create-post",
   },
   {
-    id: "04",
+    id: "03",
     label: "Users",
     icon: LuUsers,
     path: "/admin/users",
   },
   {
-    id: "05",
+    id: "04",
     label: "LogOut",
     icon: LuLogOut,
     path: "logout",

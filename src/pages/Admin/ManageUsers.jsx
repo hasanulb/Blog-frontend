@@ -1,124 +1,23 @@
-// import React, { useEffect, useState } from 'react'
-// import DashboardLayout from '../../components/layouts/DashboardLayout'
-// import axiosInstance from '../../utils/axiosInstance';
-// import { API_PATHS } from '../../utils/apiPaths';
-// import { LuFileSpreadsheet } from 'react-icons/lu';
-// import UserCard from '../../components/Cards/UserCard';
-// import toast from 'react-hot-toast'
-
-
-// const ManageUsers = () => {
-
-
-//   const [allUsers, setAllUsers] = useState([]);
-
-//   const getAllUsers = async () => {
-//     try {
-//         const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-//         console.log('dsd',response);
-        
-//         if(response.data?.length > 0) {
-//           setAllUsers(response.data)
-//         }
-//     } catch (error) {
-//       console.error("Error fetching users:",error)
-//     }
-//   };
-
-//   // Download task report
-//    const handleDownloadReport = async () => {
-//     try {
-//       const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_USERS,{
-//         responseType: "blob",
-//       });
-//       console.log("aaa",response);
-      
-
-//       // create a url for blob 
-//       const url = window.URL.createObjectURL(new Blob([response.data]));
-//       const link = document.createElement("a");
-//       link.href = url;
-//       link.setAttribute("download","user_details.xlsx");
-//       document.body.appendChild(link);
-//       link.click();
-//       link.parentNode.removeChild(link);
-//       window.URL.revokeObjectURL(url);
-//     } catch (error) {
-//       console.error("Error downloading expense details",error);
-//       toast.error("failed to dowload expense details try again");
-//     }
-//    }
-
-//   useEffect(() => {
-//     getAllUsers();
-
-//     return () => {};
-//   }, [])
-
-//   return (
-//     <DashboardLayout activeMenu="Team Members"> 
-//           <div className='mt-5 mb-10'>
-//             <div className='flex md:flex-row md:items-center justify-between'>
-//               <h2 className='text-xl md:text-xl font-medium'>Team Members</h2>
-
-//               <button className='flex md:flex download-btn' onClick={handleDownloadReport}> 
-//                 <LuFileSpreadsheet className='text-lg' />
-//                 Download Report
-//                 </button>
-//             </div>
-
-//             <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
-//               {allUsers?.map((user) => (
-//                 <UserCard key={user._id} userInfo = {user} />
-//               ))}
-//             </div>
-//           </div>
-//     </DashboardLayout>
-//   )
-// }
-
-// export default ManageUsers
-
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../components/layouts/DashboardLayout';
 import axiosInstance from '../../utils/axiosInstance';
 import { API_PATHS } from '../../utils/apiPaths';
-import { LuFileSpreadsheet } from 'react-icons/lu';
 import UserCard from '../../components/Cards/UserCard';
 import toast from 'react-hot-toast';
 
 const ManageUsers = () => {
   const [allUsers, setAllUsers] = useState([]);
+  const [formData, setFormData] = useState({ name: "", email: "", role: "member", password: "" });
+  const [editingUser, setEditingUser] = useState(null);
 
+  // Fetch all users
   const getAllUsers = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
-      if (response.data?.length > 0) {
-        setAllUsers(response.data);
-      }
+      setAllUsers(response.data || []);
     } catch (error) {
       console.error("Error fetching users:", error);
       toast.error("Failed to fetch users");
-    }
-  };
-
-  const handleDownloadReport = async () => {
-    try {
-      const response = await axiosInstance.get(API_PATHS.REPORTS.EXPORT_USERS, {
-        responseType: "blob",
-      });
-
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "user_details.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error("Error downloading user report", error);
-      toast.error("Failed to download user report");
     }
   };
 
@@ -126,21 +25,143 @@ const ManageUsers = () => {
     getAllUsers();
   }, []);
 
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Create or update user
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let payload = {
+        name: formData.name,
+        email: formData.email,
+        role: formData.role,
+      };
+  
+      if (editingUser) {
+        // ✅ Only include password if admin typed it during update
+        if (formData.password && formData.password.trim() !== "") {
+          payload.password = formData.password;
+        }
+        await axiosInstance.put(API_PATHS.USERS.UPDATE_USER(editingUser._id), payload);
+        toast.success("User updated successfully");
+      } else {
+        // ✅ Require password only for creating new user
+        payload.password = formData.password;
+        await axiosInstance.post(API_PATHS.USERS.CREATE_USER, payload);
+        toast.success("User created successfully");
+      }
+  
+      setFormData({ name: "", email: "", role: "member", password: "" });
+      setEditingUser(null);
+      getAllUsers();
+    } catch (error) {
+      console.error("Error saving user:", error);
+      toast.error("Failed to save user");
+    }
+  };
+
+  // Edit user
+  const handleEdit = (user) => {
+    setEditingUser(user);
+    setFormData({ name: user.name, email: user.email, role: user.role, password: "" });
+  };
+
+  // Delete user
+  const handleDelete = async (userId) => {
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
+    try {
+      await axiosInstance.delete(API_PATHS.USERS.DELETE_USER(userId));
+      toast.success("User deleted successfully");
+      getAllUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user");
+    }
+  };
+
   return (
     <DashboardLayout activeMenu="Team Members">
-      <div className='mt-5 mb-10'>
-        <div className='flex md:flex-row md:items-center justify-between'>
-          <h2 className='text-xl md:text-xl font-medium'>Team Members</h2>
+      <div className="mt-5 mb-10">
+        <h2 className="text-xl font-medium mb-4">Manage Users</h2>
 
-          <button className='flex md:flex download-btn' onClick={handleDownloadReport}>
-            <LuFileSpreadsheet className='text-lg' />
-            Download Report
+        {/* Create/Update Form */}
+        <form onSubmit={handleSubmit} className="mb-6 bg-white p-4 rounded shadow">
+          <h3 className="text-lg font-medium mb-3">
+            {editingUser ? "Update User" : "Create User"}
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleChange}
+              className="border p-2 rounded"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleChange}
+              className="border p-2 rounded"
+              required
+            />
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="border p-2 rounded"
+            >
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+            </select>
+            {!editingUser && (
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
+                className="border p-2 rounded"
+                required
+              />
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            {editingUser ? "Update User" : "Create User"}
           </button>
-        </div>
+        </form>
 
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-4'>
+        {/* Users List */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           {allUsers?.map((user) => (
-            <UserCard key={user._id} userInfo={user} />
+            <div key={user._id} className="p-4 bg-gray-100 rounded shadow">
+              <UserCard userInfo={user} />
+              <div className="flex justify-between mt-2">
+                <button
+                  onClick={() => handleEdit(user)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(user._id)}
+                  className="bg-red-600 text-white px-3 py-1 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           ))}
         </div>
       </div>

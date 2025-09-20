@@ -23,7 +23,7 @@ const AdminPostDetails = () => {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      await axiosInstance.delete(`${API_PATHS.POSTS.DELETE_POST}/${id}`);
+      await axiosInstance.delete(API_PATHS.POSTS.DELETE_POST(id));
       navigate("/admin/posts"); // go back to list after delete
     } catch (error) {
       console.error("Error deleting post:", error);

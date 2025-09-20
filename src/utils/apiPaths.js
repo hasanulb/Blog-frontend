@@ -25,7 +25,7 @@ export const API_PATHS = {
     GET_POST_BY_ID: (postId) => `/api/posts/${postId}`, // ✅ correct
     CREATE_POST: "/api/posts",
     UPDATE_POST: (postId) => `/api/posts/${postId}`, // ✅ correct
-    DELETE_POST: (postId) => `/api/posts/${postId}`, // ✅ correct
+    DELETE_POST: (id) => `/api/posts/${id}`, // ✅ correct
   },
 
   REPORTS: {

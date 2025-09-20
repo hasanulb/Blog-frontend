@@ -10,7 +10,7 @@ const ManageUsers = () => {
   const [formData, setFormData] = useState({ name: "", email: "", role: "member", password: "" });
   const [editingUser, setEditingUser] = useState(null);
 
-  // Fetch all users
+  // Fetch all members (exclude admins)
   const getAllUsers = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
@@ -33,27 +33,21 @@ const ManageUsers = () => {
   // Create or update user
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      let payload = {
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-      };
-  
       if (editingUser) {
-        // ✅ Only include password if admin typed it during update
-        if (formData.password && formData.password.trim() !== "") {
-          payload.password = formData.password;
-        }
+        // Remove password if empty so backend won't change it
+        const payload = { ...formData };
+        if (!payload.password) delete payload.password;
+
         await axiosInstance.put(API_PATHS.USERS.UPDATE_USER(editingUser._id), payload);
         toast.success("User updated successfully");
       } else {
-        // ✅ Require password only for creating new user
-        payload.password = formData.password;
-        await axiosInstance.post(API_PATHS.USERS.CREATE_USER, payload);
+        // Admin creating user
+        await axiosInstance.post(API_PATHS.USERS.CREATE_USER, formData);
         toast.success("User created successfully");
       }
-  
+
       setFormData({ name: "", email: "", role: "member", password: "" });
       setEditingUser(null);
       getAllUsers();

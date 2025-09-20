@@ -91,9 +91,9 @@ function Signup() {
 
                 // Redirect based on role
                 if(role === "admin"){
-                    navigate("/admin/dashboard");
+                    navigate("/admin/posts");
                 }else{
-                    navigate("/user/dashboard");
+                    navigate("/user/posts");
                 }
             }
             

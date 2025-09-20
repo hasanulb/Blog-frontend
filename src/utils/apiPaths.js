@@ -8,6 +8,7 @@ export const API_PATHS = {
     REGISTER: "/api/auth/register", // register a new user (Admi or Member)
     LOGIN: "/api/auth/login", // Authenticate user and return jwt token
     GET_PROFILE: "/api/auth/profile", // Get logged-in user details
+    UPDATE_PROFILE: "/api/auth/profile/update",
   },
 
   USERS: {
@@ -19,8 +20,6 @@ export const API_PATHS = {
   },
 
   POSTS: {
-    GET_DASHBOARD_DATA: "/api/posts/dashboard-data",
-    GET_USER_DASHBOARD_DATA: "/api/posts/user-dashboard-data",
     GET_ALL_POSTS: "/api/posts",
     GET_POST_BY_ID: (postId) => `/api/posts/${postId}`, // ✅ correct
     CREATE_POST: "/api/posts",

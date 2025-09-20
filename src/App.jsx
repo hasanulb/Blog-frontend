@@ -20,6 +20,7 @@ import MyPosts from './pages/User/MyPosts';
 import ViewTaskDetails from './pages/User/ViewTaskDetails';
 import UserPostDetails from './pages/User/UserPostDetails';
 import UserEditPost from './pages/User/UserEditPost';
+import Profile from "./pages/User/Profile";
 
 import Home from './pages/Home';
 import PostDetails from './pages/PostDetails';
@@ -55,6 +56,7 @@ const App = () => {
            <Route path="/user/edit-post/:id" element={<UserEditPost />} />
            <Route path="/user/post-details/:id" element={<UserPostDetails />} />
            <Route path='/user/task-details/:id' element={<ViewTaskDetails />} />
+           <Route path="/profile" element={<Profile />} />
 
 
           </Route>

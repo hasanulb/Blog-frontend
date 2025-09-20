@@ -9,7 +9,7 @@ import {
 import { Toaster } from 'react-hot-toast';
 
 import Login from './pages/Auth/Login';
-import Signup from './pages/Auth/Signup';
+import Signup from './pages/Auth/SignUp';
 import Dashboard from './pages/Admin/Dashboard';
 import ManagePosts from './pages/Admin/ManagePosts';
 import CreatePost from './pages/Admin/CreatePost';

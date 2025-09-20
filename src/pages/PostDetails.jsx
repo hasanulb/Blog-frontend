@@ -38,14 +38,18 @@ const PostDetails = () => {
       {/* Header */}
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
-          <Link to="/" className="text-2xl font-bold">MyBlog</Link>
+          <Link to="/" className="text-2xl font-bold">
+            MyBlog
+          </Link>
           <div className="flex items-center gap-4">
             <input
               type="text"
               placeholder="Search"
               className="border rounded-full px-4 py-1 text-sm focus:outline-none"
             />
-            <Link to="/login" className="text-sm">Sign in</Link>
+            <Link to="/login" className="text-sm">
+              Sign in
+            </Link>
             <Link
               to="/signup"
               className="bg-green-600 text-white px-4 py-1 rounded-full text-sm"
@@ -71,7 +75,9 @@ const PostDetails = () => {
           <span>· {new Date(post.createdAt).toLocaleDateString()}</span>
         </div>
 
-        <p className="text-gray-700 leading-relaxed mb-10">{post.description}</p>
+        <p className="text-gray-700 leading-relaxed mb-10">
+          {post.description}
+        </p>
 
         {/* Comments Section (without currentUser) */}
         <CommentsSection postId={post._id} />

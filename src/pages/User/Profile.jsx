@@ -49,6 +49,16 @@ const Profile = () => {
     setImageFile(e.target.files[0]);
   };
 
+  // Password validation function
+  const validatePassword = (password) => {
+    if (password.length < 6) return "Password must be at least 6 characters";
+    if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter";
+    if (!/[a-z]/.test(password)) return "Password must contain at least one lowercase letter";
+    if (!/[0-9]/.test(password)) return "Password must contain at least one number";
+    if (!/[!@#$%^&*]/.test(password)) return "Password must contain at least one special character";
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -61,10 +71,26 @@ const Profile = () => {
         imageUrl = uploadRes.imageUrl;
       }
 
-      if (formData.newPassword && formData.newPassword !== formData.confirmNewPassword) {
-        toast.error("New passwords do not match");
-        setLoading(false);
-        return;
+      // Password validations
+      if (formData.newPassword || formData.confirmNewPassword || formData.currentPassword) {
+        if (!formData.currentPassword) {
+          toast.error("Please enter your current password to change password");
+          setLoading(false);
+          return;
+        }
+
+        if (formData.newPassword !== formData.confirmNewPassword) {
+          toast.error("New passwords do not match");
+          setLoading(false);
+          return;
+        }
+
+        const passwordError = validatePassword(formData.newPassword);
+        if (passwordError) {
+          toast.error(passwordError);
+          setLoading(false);
+          return;
+        }
       }
 
       const payload = {
@@ -81,7 +107,8 @@ const Profile = () => {
       await axiosInstance.put(API_PATHS.AUTH.UPDATE_PROFILE, payload);
 
       toast.success("Profile updated successfully");
-      getProfile(); // refresh profile info
+      setFormData((prev) => ({ ...prev, currentPassword: "", newPassword: "", confirmNewPassword: "" }));
+      getProfile();
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error(error.response?.data?.message || "Failed to update profile");
@@ -95,6 +122,7 @@ const Profile = () => {
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-medium mb-4">My Profile</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name & Email */}
           <div>
             <label className="block text-gray-700 mb-1">Name</label>
             <input
@@ -106,7 +134,6 @@ const Profile = () => {
               required
             />
           </div>
-
           <div>
             <label className="block text-gray-700 mb-1">Email</label>
             <input
@@ -119,6 +146,7 @@ const Profile = () => {
             />
           </div>
 
+          {/* Profile Image */}
           <div>
             <label className="text-xs font-medium text-slate-600 mb-1 block">Profile Image</label>
             <input
@@ -128,7 +156,6 @@ const Profile = () => {
               className="block w-full text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
             />
           </div>
-
           {formData.profileImageUrl && (
             <img
               src={imageFile ? URL.createObjectURL(imageFile) : formData.profileImageUrl}
@@ -139,8 +166,8 @@ const Profile = () => {
 
           <hr className="my-4" />
 
+          {/* Password */}
           <h3 className="text-lg font-medium mb-2">Change Password</h3>
-
           <div>
             <label className="block text-gray-700 mb-1">Current Password</label>
             <input
@@ -151,7 +178,6 @@ const Profile = () => {
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
-
           <div>
             <label className="block text-gray-700 mb-1">New Password</label>
             <input
@@ -162,7 +188,6 @@ const Profile = () => {
               className="w-full px-3 py-2 border rounded-lg"
             />
           </div>
-
           <div>
             <label className="block text-gray-700 mb-1">Confirm New Password</label>
             <input
@@ -174,6 +199,7 @@ const Profile = () => {
             />
           </div>
 
+          {/* Buttons */}
           <div className="flex justify-end gap-3 mt-4">
             <button
               type="button"

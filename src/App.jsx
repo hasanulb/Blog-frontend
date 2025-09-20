@@ -56,7 +56,7 @@ const App = () => {
            <Route path="/user/edit-post/:id" element={<UserEditPost />} />
            <Route path="/user/post-details/:id" element={<UserPostDetails />} />
            <Route path='/user/task-details/:id' element={<ViewTaskDetails />} />
-           <Route path="/profile" element={<Profile />} />
+           <Route path="/user/profile" element={<Profile />} />
 
 
           </Route>

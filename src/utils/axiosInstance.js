@@ -1,15 +1,14 @@
 import axios from "axios";
-import { BASE_URL } from "./apiPaths";
 const token = localStorage.getItem("token");
 
 const axiosInstance = axios.create({
-  baseURL: "https://blog-backend-j2ex.onrender.com",
+  baseURL: "https://blog-backend-3zfh.onrender.com",
   headers: {
     Authorization: token ? `Bearer ${token}` : "",
   },
 });
 
-// Request Interceptor
+
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
@@ -21,14 +20,14 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response Interceptor (fixed)
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Handle common errors globally
+    
     if (error.response) {
       if (error.response.status === 401) {
-        // Redirect to login page
+        
         window.location.href = "/login";
       } else if (error.response.status === 500) {
         console.error("Server error. Please try again");

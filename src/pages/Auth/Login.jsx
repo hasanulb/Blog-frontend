@@ -15,7 +15,7 @@ const Login = () => {
     const {updateUser} = useContext(UserContext)
     const navigate = useNavigate();
 
-    // Handle Login Form Submit
+    
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -31,7 +31,7 @@ const Login = () => {
 
         setError("");
 
-        // Login API Call
+        
         try {
             const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
                 email,
@@ -44,7 +44,7 @@ const Login = () => {
                 localStorage.setItem("token",token);
                 updateUser(response.data);
 
-                // Redirect based on role
+                
                 if(role ==  "admin"){
                     navigate("/admin/posts");
                 }else{

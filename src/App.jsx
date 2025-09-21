@@ -20,6 +20,7 @@ import AdminEditPost from "./pages/Admin/AdminEditPost";
 
 // User Pages
 import MyPosts from "./pages/User/MyPosts";
+import UserCreatePost from "./pages/User/UserCreatePost";
 import ViewTaskDetails from "./pages/User/ViewTaskDetails";
 import UserAllPosts from "./pages/User/UserAllPosts";
 import UserMyPosts from "./pages/User/UserMyPosts";
@@ -59,7 +60,7 @@ const AppRoutes = () => {
 
       {/* User Routes */}
       <Route element={<PrivateRoute allowedRoles={["user", "admin"]} />}>
-        <Route path="/user/create-post" element={<CreatePost />} />
+        <Route path="/user/create-post" element={<UserCreatePost />} />
         <Route path="/user/posts" element={<MyPosts />} />
         <Route path="/user/edit-post/:id" element={<UserEditPost />} />
         <Route

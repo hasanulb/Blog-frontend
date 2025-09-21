@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import uploadImage from "../../utils/uploadImage";
 
-const CreateAdminPost = () => {
+const UserCreatePost = () => {
   const location = useLocation();
   const { postId } = location.state || {};
   const navigate = useNavigate();
@@ -14,11 +14,12 @@ const CreateAdminPost = () => {
   const [postData, setPostData] = useState({
     title: "",
     description: "",
-    image: null,
+    image: null, 
   });
   const [currentPost, setCurrentPost] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
 
   const handleValueChange = (key, value) => {
     setPostData((prev) => ({ ...prev, [key]: value }));
@@ -27,7 +28,7 @@ const CreateAdminPost = () => {
   const clearData = () =>
     setPostData({ title: "", description: "", image: null });
 
-  // Create Post
+ 
   const createPost = async () => {
     setLoading(true);
     try {
@@ -46,9 +47,7 @@ const CreateAdminPost = () => {
       await axiosInstance.post(API_PATHS.POSTS.CREATE_POST, payload);
       toast.success("Post created successfully");
       clearData();
-
-      
-      navigate("/admin/posts");
+      navigate("/user/posts");
     } catch (err) {
       console.error("Error creating post:", err);
       setError(err.response?.data?.message || "Something went wrong");
@@ -62,7 +61,9 @@ const CreateAdminPost = () => {
     setLoading(true);
     try {
       let imageUrl = currentPost?.postImageUrl || "";
-      if (postData.image && postData.image !== currentPost.postImageUrl) {
+
+     
+      if (postData.image && postData.image instanceof File) {
         const uploadRes = await uploadImage(postData.image);
         imageUrl = uploadRes.imageUrl || "";
       }
@@ -75,9 +76,7 @@ const CreateAdminPost = () => {
 
       await axiosInstance.put(API_PATHS.POSTS.UPDATE_POST(postId), payload);
       toast.success("Post updated successfully");
-
-     
-      navigate("/admin/posts");
+      navigate("/user/posts");
     } catch (err) {
       console.error("Error updating post:", err);
       toast.error(err.response?.data?.message || "Failed to update post");
@@ -86,18 +85,19 @@ const CreateAdminPost = () => {
     }
   };
 
-
+ 
   const handleSubmit = () => {
     setError("");
     if (!postData.title.trim()) return setError("Title is required");
     if (!postData.description.trim())
       return setError("Description is required");
-    if (!postData.image && !postId) return setError("Please upload an image");
+    if (!postData.image && !currentPost)
+      return setError("Please upload an image");
 
     postId ? updatePost() : createPost();
   };
 
-
+ 
   const getPostDetailsByID = async () => {
     try {
       const res = await axiosInstance.get(
@@ -109,7 +109,7 @@ const CreateAdminPost = () => {
         setPostData({
           title: postInfo.title,
           description: postInfo.description,
-          image: postInfo.postImageUrl,
+          image: null, 
         });
       }
     } catch (err) {
@@ -169,6 +169,30 @@ const CreateAdminPost = () => {
               onChange={(e) => handleValueChange("image", e.target.files[0])}
               className="block w-half text-sm text-gray-700 border border-gray-300 rounded-lg cursor-pointer focus:outline-none"
             />
+
+            
+            {currentPost?.postImageUrl && !postData.image && (
+              <div className="mt-2">
+                <img
+                  src={currentPost.postImageUrl}
+                  alt="Post"
+                  className="w-40 rounded-lg border"
+                />
+                <p className="text-xs text-gray-500 mt-1">Current image</p>
+              </div>
+            )}
+
+            
+            {postData.image && postData.image instanceof File && (
+              <div className="mt-2">
+                <img
+                  src={URL.createObjectURL(postData.image)}
+                  alt="Preview"
+                  className="w-40 rounded-lg border"
+                />
+                <p className="text-xs text-gray-500 mt-1">New image preview</p>
+              </div>
+            )}
           </div>
 
           {error && (
@@ -190,4 +214,4 @@ const CreateAdminPost = () => {
   );
 };
 
-export default CreateAdminPost;
+export default UserCreatePost;

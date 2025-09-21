@@ -1,4 +1,4 @@
-// pages/PostDetails.jsx
+
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance";
@@ -11,7 +11,7 @@ const PostDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch post by ID
+ 
   const getPost = async () => {
     try {
       setLoading(true);
@@ -35,7 +35,7 @@ const PostDetails = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Header */}
+      
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
           <Link to="/" className="text-2xl font-bold">
@@ -60,7 +60,7 @@ const PostDetails = () => {
         </div>
       </header>
 
-      {/* Post Details */}
+      
       <main className="max-w-4xl mx-auto px-6 py-10">
         <img
           src={post.postImageUrl}
@@ -79,7 +79,7 @@ const PostDetails = () => {
           {post.description}
         </p>
 
-        {/* Comments Section (without currentUser) */}
+        
         <CommentsSection postId={post._id} />
       </main>
     </div>

@@ -6,7 +6,7 @@ import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
 
 const UserPostDetails = () => {
-  const { id } = useParams(); // postId from route
+  const { id } = useParams(); 
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ const UserPostDetails = () => {
     try {
       await axiosInstance.delete(`${API_PATHS.POSTS.DELETE_POST}/${id}`);
       toast.success("Post deleted successfully");
-      navigate("/user/my-posts"); // back to user's posts list
+      navigate("/user/my-posts"); 
     } catch (error) {
       console.error("Error deleting post:", error);
       toast.error("Failed to delete post");

@@ -19,7 +19,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch user profile
+  
   const getProfile = async () => {
     try {
       const res = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
@@ -49,7 +49,7 @@ const Profile = () => {
     setImageFile(e.target.files[0]);
   };
 
-  // Password validation function
+  
   const validatePassword = (password) => {
     if (password.length < 6) return "Password must be at least 6 characters";
     if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter";
@@ -71,7 +71,7 @@ const Profile = () => {
         imageUrl = uploadRes.imageUrl;
       }
 
-      // Password validations
+      
       if (formData.newPassword || formData.confirmNewPassword || formData.currentPassword) {
         if (!formData.currentPassword) {
           toast.error("Please enter your current password to change password");
@@ -122,7 +122,7 @@ const Profile = () => {
       <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-medium mb-4">My Profile</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name & Email */}
+          
           <div>
             <label className="block text-gray-700 mb-1">Name</label>
             <input
@@ -146,7 +146,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Profile Image */}
+          
           <div>
             <label className="text-xs font-medium text-slate-600 mb-1 block">Profile Image</label>
             <input
@@ -166,7 +166,7 @@ const Profile = () => {
 
           <hr className="my-4" />
 
-          {/* Password */}
+          
           <h3 className="text-lg font-medium mb-2">Change Password</h3>
           <div>
             <label className="block text-gray-700 mb-1">Current Password</label>
@@ -199,7 +199,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Buttons */}
+          
           <div className="flex justify-end gap-3 mt-4">
             <button
               type="button"

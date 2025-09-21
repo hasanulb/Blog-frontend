@@ -6,11 +6,11 @@ import { API_PATHS } from "../utils/apiPaths";
 const Home = () => {
   const [posts, setAllPosts] = useState([]);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("newest"); // newest or oldest
+  const [sort, setSort] = useState("newest"); 
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 6; // adjust as needed
+  const postsPerPage = 6; 
 
-  // Fetch published posts (public)
+  
   const getPosts = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_PUBLIC);
@@ -24,7 +24,7 @@ const Home = () => {
     getPosts();
   }, []);
 
-  // Filter posts based on search
+  
   const filteredPosts = posts.filter((post) => {
     const lowerSearch = search.toLowerCase();
     return (
@@ -33,14 +33,14 @@ const Home = () => {
     );
   });
 
-  // Sort posts
+  
   const sortedPosts = filteredPosts.sort((a, b) => {
     if (sort === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
     if (sort === "oldest") return new Date(a.createdAt) - new Date(b.createdAt);
     return 0;
   });
 
-  // Pagination logic
+  
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
@@ -52,7 +52,7 @@ const Home = () => {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Header */}
+      
       <header className="border-b bg-white sticky top-0 z-50">
         <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
           <Link to="/" className="text-2xl font-bold">
@@ -87,11 +87,11 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Main content */}
+      
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h2 className="text-lg font-medium mb-6">Editor’s picks</h2>
 
-        {/* Featured Post */}
+        
         {currentPosts.length > 0 && (
           <Link
             to={`/post/${currentPosts[0]._id}`}
@@ -119,7 +119,7 @@ const Home = () => {
           </Link>
         )}
 
-        {/* Other posts grid */}
+        
         <div className="grid md:grid-cols-3 gap-6">
           {currentPosts.slice(1).map((post) => (
             <Link
@@ -148,7 +148,7 @@ const Home = () => {
           ))}
         </div>
 
-        {/* Pagination controls */}
+        
         {totalPages > 1 && (
           <div className="flex justify-center mt-6 gap-2">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (

@@ -5,7 +5,7 @@ import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 
 const AdminPostDetails = () => {
-  const { id } = useParams(); // postId from route
+  const { id } = useParams(); 
   const [post, setPost] = useState(null);
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const AdminPostDetails = () => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
       await axiosInstance.delete(API_PATHS.POSTS.DELETE_POST(id));
-      navigate("/admin/posts"); // go back to list after delete
+      navigate("/admin/posts"); 
     } catch (error) {
       console.error("Error deleting post:", error);
     }

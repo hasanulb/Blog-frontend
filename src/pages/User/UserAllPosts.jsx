@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useContext } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 import DashboardLayout from "../../components/layouts/DashboardLayout";
@@ -9,25 +10,26 @@ const UserAllPosts = () => {
   const [loading, setLoading] = useState(true);
   const { user: currentUser } = useContext(UserContext);
 
-  // Track comment input for each post
+  
   const [comments, setComments] = useState({});
 
+  
+  const fetchAllPosts = async () => {
+    try {
+      const res = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_PUBLIC);
+      setPosts(res.data.posts || []);
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchAllPosts = async () => {
-      try {
-        const res = await axiosInstance.get(API_PATHS.POSTS.GET_ALL_PUBLIC);
-        setPosts(res.data.posts || []);
-      } catch (err) {
-        console.error("Error fetching posts:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchAllPosts();
   }, []);
 
   const handleEdit = (postId) => {
-    // Navigate or open edit modal if implemented
     alert(`Edit post ${postId}`);
   };
 
@@ -55,11 +57,19 @@ const UserAllPosts = () => {
     }
 
     try {
-      await axiosInstance.post(`/api/posts/${postId}/comment`, {
+      const res = await axiosInstance.post(`/api/posts/${postId}/comment`, {
         comment: commentText,
       });
 
-      alert("Comment posted!");
+     
+      setPosts((prev) =>
+        prev.map((p) =>
+          p._id === postId
+            ? { ...p, comments: [...(p.comments || []), res.data.comment] }
+            : p
+        )
+      );
+
       setComments((prev) => ({ ...prev, [postId]: "" }));
     } catch (err) {
       console.error("Error posting comment:", err);
@@ -115,6 +125,24 @@ const UserAllPosts = () => {
                     </div>
                   ) : (
                     <div className="mt-2">
+                     
+                      {post.comments && post.comments.length > 0 && (
+                        <div className="mb-2">
+                          <h4 className="text-sm font-semibold">Comments:</h4>
+                          <ul className="space-y-1 text-sm text-gray-700 max-h-24 overflow-y-auto">
+                            {post.comments.map((c) => (
+                              <li key={c._id}>
+                                <span className="font-medium">
+                                  {c.user?.name || "Anon"}:
+                                </span>{" "}
+                                {c.text}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      
                       <textarea
                         value={comments[post._id] || ""}
                         onChange={(e) =>

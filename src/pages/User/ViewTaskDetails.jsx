@@ -24,7 +24,7 @@ const ViewTaskDetails = () => {
       }
     };
 
-    // get Task info by ID
+   
     const getTaskDetailsByID = async () => {
       try {
         const response = await axiosInstance.get(API_PATHS.TASKS.GET_TASK_BY_ID(id));
@@ -38,7 +38,7 @@ const ViewTaskDetails = () => {
       }
     };
     
-    // handle todo check
+ 
     const updateTodoChecklist = async (index) => {
       const todoChecklist = [...task?.todoChecklist];
       const taskId = id;
@@ -53,7 +53,7 @@ const ViewTaskDetails = () => {
           if(response.status === 200){
             setTask(response.data?.task || task);
           } else {
-            // optionally revert the toggle if the API call fails
+            
             todoChecklist[index].completed = !todoChecklist[index].completed;
           }
         } catch (error) {
@@ -63,7 +63,7 @@ const ViewTaskDetails = () => {
       }
     };
 
-    // handle attachment link click
+    
     const handleLinkClick = (link) => {
       if(!/^https?:\/\//i.test(link)){
         link = "https://" + link;

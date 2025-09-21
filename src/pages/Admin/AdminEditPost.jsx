@@ -5,7 +5,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
-import uploadImage from "../../utils/uploadImage"; // make sure you have this
+import uploadImage from "../../utils/uploadImage"; 
 
 const AdminEditPost = () => {
   const { id } = useParams();
@@ -24,7 +24,7 @@ const AdminEditPost = () => {
   const getPostDetails = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.POSTS.GET_POST_BY_ID(id));
-      const post = response.data?.post || response.data; // handle your API response structure
+      const post = response.data?.post || response.data; 
       setFormData({
         title: post.title || "",
         description: post.description || "",
@@ -36,18 +36,18 @@ const AdminEditPost = () => {
     }
   };
 
-  // Handle input changes
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image selection
+  
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
-  // Submit updated post
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -55,13 +55,13 @@ const AdminEditPost = () => {
     try {
       let imageUrl = formData.postImageUrl;
 
-      // Upload image if a new one is selected
+      
       if (imageFile) {
         const uploadRes = await uploadImage(imageFile);
-        imageUrl = uploadRes.imageUrl; // returned URL from upload API
+        imageUrl = uploadRes.imageUrl; 
       }
 
-      // Update post
+      
       await axiosInstance.put(API_PATHS.POSTS.UPDATE_POST(id), {
         title: formData.title,
         description: formData.description,

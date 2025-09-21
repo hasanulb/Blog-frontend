@@ -7,15 +7,7 @@ import {
 } from "react-icons/lu";
 
 export const SIDE_MENU_DATA = [
-  
-  
-    {
-        id: "01",
-        label: "All Blogs",
-        icon: LuClipboardCheck,
-        path: "/posts/:id",
-      },
-    {
+  {
     id: "02",
     label: "Manage Posts",
     icon: LuClipboardCheck,
@@ -42,35 +34,34 @@ export const SIDE_MENU_DATA = [
 ];
 
 export const SIDE_MENU_USER_DATA = [
-    {
-      id: "01",
-      label: "All Blogs",
-      icon: LuClipboardCheck,
-      path: "/user/posts/all", // All users' posts
-    },
-    {
-      id: "02",
-      label: "My Posts",
-      icon: LuClipboardCheck,
-      path: "/user/posts/mine", // Only logged-in user's posts
-    },
-    {
-      id: "03",
-      label: "Profile",
-      icon: LuLayoutDashboard,
-      path: "/user/profile",
-    },
-    {
-      id: "04",
-      label: "Create Post",
-      icon: LuSquarePlus,
-      path: "/user/create-post",
-    },
-    {
-      id: "05",
-      label: "LogOut",
-      icon: LuLogOut,
-      path: "logout",
-    },
-  ];
-  
+  {
+    id: "01",
+    label: "All Blogs",
+    icon: LuClipboardCheck,
+    path: "/user/posts/all", 
+  },
+  {
+    id: "02",
+    label: "My Posts",
+    icon: LuClipboardCheck,
+    path: "/user/posts", 
+  },
+  {
+    id: "03",
+    label: "Profile",
+    icon: LuLayoutDashboard,
+    path: "/user/profile",
+  },
+  {
+    id: "04",
+    label: "Create Post",
+    icon: LuSquarePlus,
+    path: "/user/create-post",
+  },
+  {
+    id: "05",
+    label: "LogOut",
+    icon: LuLogOut,
+    path: "logout",
+  },
+];

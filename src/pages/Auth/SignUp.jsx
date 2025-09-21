@@ -22,25 +22,24 @@ function Signup() {
 
   const [error, setError] = useState(null);
 
-  // Password validation regex:
-  // - min 8 chars, at least one uppercase, one lowercase, one number, one special char
+  
   const validatePassword = (pwd) => {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     return regex.test(pwd);
   };
 
-  // Handle SignUp Form Submit
+  
   const handleSignUp = async (e) => {
     e.preventDefault();
 
     let profileImageUrl = "";
 
-    // eslint-disable-next-line no-undef
+    
     const isAdmin =
       adminInviteToken === import.meta.env.VITE_ADMIN_INVITE_TOKEN;
 
-    // Basic validation
+    
     if (!fullName) {
       setError("Please enter full name");
       return;
@@ -76,7 +75,7 @@ function Signup() {
     setError("");
 
     try {
-      // Upload image if present and user is member
+      
       if (!isAdmin && profilePic) {
         const imgUploadRes = await uploadImage(profilePic);
         profileImageUrl = imgUploadRes.imageUrl || "";

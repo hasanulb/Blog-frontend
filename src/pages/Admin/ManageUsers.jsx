@@ -10,7 +10,6 @@ const ManageUsers = () => {
   const [formData, setFormData] = useState({ name: "", email: "", role: "member", password: "" });
   const [editingUser, setEditingUser] = useState(null);
 
-  // Fetch all members (exclude admins)
   const getAllUsers = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.USERS.GET_ALL_USERS);
@@ -25,25 +24,23 @@ const ManageUsers = () => {
     getAllUsers();
   }, []);
 
-  // Handle input changes
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Create or update user
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       if (editingUser) {
-        // Remove password if empty so backend won't change it
         const payload = { ...formData };
         if (!payload.password) delete payload.password;
 
         await axiosInstance.put(API_PATHS.USERS.UPDATE_USER(editingUser._id), payload);
         toast.success("User updated successfully");
       } else {
-        // Admin creating user
+
         await axiosInstance.post(API_PATHS.USERS.CREATE_USER, formData);
         toast.success("User created successfully");
       }
@@ -57,13 +54,12 @@ const ManageUsers = () => {
     }
   };
 
-  // Edit user
   const handleEdit = (user) => {
     setEditingUser(user);
     setFormData({ name: user.name, email: user.email, role: user.role, password: "" });
   };
 
-  // Delete user
+
   const handleDelete = async (userId) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
@@ -81,7 +77,7 @@ const ManageUsers = () => {
       <div className="mt-5 mb-10">
         <h2 className="text-xl font-medium mb-4">Manage Users</h2>
 
-        {/* Create/Update Form */}
+      
         <form onSubmit={handleSubmit} className="mb-6 bg-white p-4 rounded shadow">
           <h3 className="text-lg font-medium mb-3">
             {editingUser ? "Update User" : "Create User"}
@@ -136,7 +132,7 @@ const ManageUsers = () => {
           </button>
         </form>
 
-        {/* Users List */}
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
           {allUsers?.map((user) => (
             <div key={user._id} className="p-4 bg-gray-100 rounded shadow">

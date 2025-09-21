@@ -4,7 +4,7 @@ import DashboardLayout from "../../components/layouts/DashboardLayout";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import toast from "react-hot-toast";
-import uploadImage from "../../utils/uploadImage"; // make sure you have this
+import uploadImage from "../../utils/uploadImage"; 
 
 const UserEditPost = () => {
   const { id } = useParams();
@@ -19,11 +19,11 @@ const UserEditPost = () => {
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch post details
+  
   const getPostDetails = async () => {
     try {
       const response = await axiosInstance.get(API_PATHS.POSTS.GET_POST_BY_ID(id));
-      const post = response.data?.post || response.data; // adapt to API response
+      const post = response.data?.post || response.data; 
       setFormData({
         title: post.title || "",
         description: post.description || "",
@@ -35,18 +35,18 @@ const UserEditPost = () => {
     }
   };
 
-  // Handle input changes
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle image selection
+  
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]);
   };
 
-  // Submit updated post
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -54,13 +54,13 @@ const UserEditPost = () => {
     try {
       let imageUrl = formData.postImageUrl;
 
-      // Upload new image if selected
+      
       if (imageFile) {
         const uploadRes = await uploadImage(imageFile);
-        imageUrl = uploadRes.imageUrl; // returned URL from upload API
+        imageUrl = uploadRes.imageUrl;
       }
 
-      // Update post
+      
       await axiosInstance.put(API_PATHS.POSTS.UPDATE_POST(id), {
         title: formData.title,
         description: formData.description,
@@ -68,7 +68,7 @@ const UserEditPost = () => {
       });
 
       toast.success("Post updated successfully");
-      navigate("/user/posts"); // redirect to user posts
+      navigate("/user/posts"); 
     } catch (error) {
       console.error("Error updating post:", error);
       toast.error("Failed to update post");
